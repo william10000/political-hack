@@ -2,21 +2,14 @@
 // https://developers.google.com/civic-information/docs/v2/representatives/representativeInfoByAddress
 // https://github.com/googleapis/google-api-nodejs-client
 const { google } = require('googleapis');
-const fs = require('fs');
 
 function apiKey() {
   return new Promise((resolve, reject) => {
-    if (process.env.GOOGLE_API_KEY) {
-      resolve(process.env.GOOGLE_API_KEY);
+    if (process.env.GOOGLE_CIVIC_API_KEY) {
+      resolve(process.env.GOOGLE_CIVIC_API_KEY);
     } else {
-      fs.readFile('./keys/google/apikey.txt', (err, data) => {  
-        if (err || !data) {
-          reject(err || new Error('Failed to fetch data.'));
-          return;
-        }
-        const key = data.toString();
-        resolve(key);
-      });
+      reject(new Error('Failed to fetch data.'));
+      return;
     }
   });
 }
@@ -58,6 +51,7 @@ async function test() {
 }
 
 if (require.main === module) {
+  require('../config/env');
   test();
 }
 

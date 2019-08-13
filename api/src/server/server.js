@@ -1,3 +1,4 @@
+import _ from '../config/env';
 import express from 'express';
 import { router } from '../routes/index.route';
 import bodyParser from 'body-parser';
