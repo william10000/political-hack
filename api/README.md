@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Get some API keys for Google Civic and OpenFEC APIs and create a .env file in the api directory to store the keys. The .env file should be ignored because of an entry in .gitignore.
+Get some API keys for Google Civic and OpenFEC APIs and create a .env file in the api directory to store the keys. The .env file should be ignored because of an entry in .gitignore. For google, you might want to set up a billing or other alerts monitor usage of your key. You might also want to restrict the google key to just the Civic API.
 
 ## The application locally
 
