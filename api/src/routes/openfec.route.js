@@ -1,5 +1,4 @@
 // https://api.open.fec.gov/developers/
-const fs = require('fs');
 const fetch = require('node-fetch');
 
 function apiKey() {
@@ -7,14 +6,7 @@ function apiKey() {
     if (process.env.OPENFEC_API_KEY) {
       resolve(process.env.OPENFEC_API_KEY);
     } else {
-      fs.readFile('./keys/openfec/apikey.txt', (err, data) => {  
-        if (err || !data) {
-          reject(err || new Error('Failed to fetch data.'));
-          return;
-        }
-        const key = data.toString();
-        resolve(key);
-      });
+      reject(Error('Failed to fetch data from openfec api.'));
     }
   });
 }
@@ -32,6 +24,7 @@ async function candidatesForName(req, res) {
   console.log(url);
   const response = await fetch(url);
   const results = await response.json();
+  // TODO: handle pagination
   res.status(200).json(results);
 }
 
@@ -49,6 +42,7 @@ async function test() {
 }
 
 if (require.main === module) {
+  require('../config/env'); // server.js isn't loaded so we need to 'require' the env variables here
   test();
 }
 

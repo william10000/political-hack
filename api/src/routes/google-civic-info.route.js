@@ -8,7 +8,7 @@ function apiKey() {
     if (process.env.GOOGLE_CIVIC_API_KEY) {
       resolve(process.env.GOOGLE_CIVIC_API_KEY);
     } else {
-      reject(new Error('Failed to fetch data.'));
+      reject(new Error('Failed to fetch data from google civic.'));
       return;
     }
   });
@@ -50,8 +50,11 @@ async function test() {
   });
 }
 
+
+// ./node_modules/babel-cli/bin/babel-node.js src/routes/google-civic-info.route.js
+// must use babel-node to use ES6 import syntax
 if (require.main === module) {
-  require('../config/env');
+  require('../config/env'); // server.js isn't loaded so we need to 'require' the env variables here
   test();
 }
 

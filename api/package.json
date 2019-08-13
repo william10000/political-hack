@@ -8,7 +8,7 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
-		"test": "babel-node src/routes/google-civic-info.route.js",
+		"test": "babel-node src/routes/google-civic-info.route.js && ./node_modules/babel-cli/bin/babel-node.js src/routes/openfec.route.js",
 		"build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
 		"start": "nodemon --exec babel-node src/server/server.js"
 	},
