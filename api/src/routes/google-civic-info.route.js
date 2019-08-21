@@ -14,8 +14,7 @@ function apiKey() {
   });
 }
 
-async function repsForAddress(req, res) {
-  const address = req.params.address;
+async function getRepsFromCivicInfoAPI(address) {
   let key;
   try {
     key = await apiKey();
@@ -23,41 +22,26 @@ async function repsForAddress(req, res) {
     console.error(e);
     return;
   }
+
   const civicInfo = google.civicinfo({
     version: 'v2',
     auth: key,
   });
+
   const results = await civicInfo.representatives.representativeInfoByAddress({
     address: address,
   });
-  res.status(200).json(results.data);
+  
+  return results.data
 }
 
-async function test() {
-  const address = '3423 Piedmont Rd NE, Atlanta, GA 30305';
-  repsForAddress({ params: { address } }, {
-    status: () => {
-      return {
-        json: (res) => { 
-          const { officials, normalizedInput } = res;
-          console.log(`\n\nReceived representatives for address: ${JSON.stringify(normalizedInput)}\n\n----------\n\n`);
-          officials.forEach(official => {
-            console.log(`${JSON.stringify(official)}\n\n----------\n\n`);
-          });
-        }
-      }; 
-    }
-  });
-}
-
-
-// ./node_modules/babel-cli/bin/babel-node.js src/routes/google-civic-info.route.js
-// must use babel-node to use ES6 import syntax
-if (require.main === module) {
-  require('../config/env'); // server.js isn't loaded so we need to 'require' the env variables here
-  test();
+async function repsForAddress(req, res) {
+  const address = req.params.address;
+  const results = await getRepsFromCivicInfoAPI(address);
+  res.status(200).json(results);
 }
 
 module.exports = {
   repsForAddress,
+  getRepsFromCivicInfoAPI,
 };

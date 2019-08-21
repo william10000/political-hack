@@ -11,41 +11,30 @@ function apiKey() {
   });
 }
 
-async function candidatesForName(req, res) {
+async function getCandidatesFromOpenFECAPI(name) {
   let key;
+
   try {
     key = await apiKey();
   } catch (e) {
     console.error(e);
     return;
   }
-  const name = req.params.name;
+
   const url = `https://api.open.fec.gov/v1/candidates/search?api_key=${key}&name=${name}`;
-  console.log(url);
   const response = await fetch(url);
-  const results = await response.json();
-  // TODO: handle pagination
+  const results = response.json();
+
+  return results;
+}
+
+async function candidatesForName(req, res) {
+  const name = req.params.name;
+  results = await getCandidatesFromOpenFECAPI(name);
   res.status(200).json(results);
-}
-
-async function test() {
-  const name = 'David Perdue';
-  candidatesForName({ params: { name } }, {
-    status: () => {
-      return {
-        json: (res) => { 
-          console.log(JSON.stringify(res));
-        },
-      };
-    },
-  });
-}
-
-if (require.main === module) {
-  require('../config/env'); // server.js isn't loaded so we need to 'require' the env variables here
-  test();
 }
 
 module.exports = {
   candidatesForName,
+  getCandidatesFromOpenFECAPI,
 };
